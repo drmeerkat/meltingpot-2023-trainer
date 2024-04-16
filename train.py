@@ -1,5 +1,6 @@
 import os
 import ray
+import torch
 from ray import air, tune
 from ray.air.integrations.wandb import WandbLoggerCallback
 from ray.rllib.algorithms import ppo
@@ -20,7 +21,9 @@ timestamp = datetime.now().strftime("%Y%m%d-%H%M-%S")
 # if not os.path.isdir(args.base_log_dir): 
 #     os.makedirs(args.base_log_dir)
 # TODO: do you need timestamp in ray log?
-output_dir = f'/home/meerkat/Developments/explogs/{timestamp}-ray-logs'
+
+# This output_dir is the path used in your container!!
+output_dir = f'/workspace/logs/{timestamp}-ray-logs'
 num_workers = 8
 use_tf_board = True
 random_seed = 136838
@@ -43,6 +46,11 @@ configs, exp_config, tune_config = get_experiment_config(default_config,
                                                          env_creator)
 # Set seed for deterministic training
 configs.debugging(seed=random_seed)
+
+# Enable gpu training, maybe you can limit this to 1
+if torch.cuda.is_available():
+    # configs.num_gpus = torch.cuda.device_count()
+    configs.num_gpus = 1
 
 if "WANDB_API_KEY" in os.environ:
     wandb_project = f'{experiment_name}_torch'
@@ -73,7 +81,7 @@ ckpt_config = air.CheckpointConfig(num_to_keep=exp_config['keep'],
 tuner = tune.Tuner(
         'PPO',
         param_space=configs.to_dict(),
-        run_config=air.RunConfig(name = exp_config['name'], callbacks=callbacks, local_dir=exp_config['dir'], 
+        run_config=air.RunConfig(name = exp_config['name'], callbacks=callbacks, storage_path=exp_config['dir'], 
                                 stop=exp_config['stop'], checkpoint_config=ckpt_config, verbose=0),
     )
 
@@ -84,4 +92,4 @@ print(best_result)
 
 ray.shutdown()
 
-# nohup docker run --rm -v "/home/ubuntu/c3learning/Curriculum-Baselines:/workspace/code" -v "/home/ubuntu/explogs:/workspace/logs" -w /workspace/code/currot --gpus '"device=0"' --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 drmeerkat/torchdev python -u run.py --device cuda --base-log-dir /workspace/logs --type wasserstein --learning-rate 5e-4 --net-arch 1 --k 2 --sep 1 --seed $1 > /home/ubuntu/wass.log 2>&1 &
+# nohup docker compose -f "/home/meerkat/Developments/rewardshaping/docker-compose-rs.yml" run --rm -w /workspace/code development python -u train.py > /home/meerkat/Developments/rewardshaping/rs.log 2>&1 &
