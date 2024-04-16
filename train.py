@@ -6,13 +6,25 @@ from ray.rllib.algorithms import ppo
 from ray.tune import registry
 from environments.al_harvest_env import al_harvest_env_creator
 from config import get_experiment_config
+from datetime import datetime
 
 
 # USER INPUT
-output_dir = '/home/ben/Downloads/al_harvest_training_output'
-num_workers = 4
+timestamp = datetime.now().strftime("%Y%m%d-%H%M-%S")
+# if args.debug:
+#     args.base_log_dir = os.path.join(args.base_log_dir, f"{timestamp}-debug-logs")
+# elif args.eva:
+#     args.base_log_dir = os.path.join(args.base_log_dir, f"{timestamp}-eva-logs")
+# else:
+#     args.base_log_dir = os.path.join(args.base_log_dir, f"{timestamp}-logs")
+# if not os.path.isdir(args.base_log_dir): 
+#     os.makedirs(args.base_log_dir)
+# TODO: do you need timestamp in ray log?
+output_dir = f'/home/meerkat/Developments/explogs/{timestamp}-ray-logs'
+num_workers = 8
+use_tf_board = True
 # the below settings should only be changed if you add support for a new substrate
-experiment_name = 'al_harvest'
+experiment_name = f'al_harvest'
 substrate_name = 'allelopathic_harvest__open'
 env_creator = al_harvest_env_creator
 
@@ -34,7 +46,7 @@ if "WANDB_API_KEY" in os.environ:
     wandb_group = "meltingpot"
 
     # Set up Weights And Biases logging if API key is set in environment variable.
-    wdb_callbacks = [
+    callbacks = [
         WandbLoggerCallback(
             project=wandb_project,
             group=wandb_group,
@@ -42,9 +54,13 @@ if "WANDB_API_KEY" in os.environ:
             log_config=True,
         )
     ]
+elif use_tf_board:
+    # project_name = f'{experiment_name}'
+    callbacks = [
+    ] 
 else:
-    wdb_callbacks = []
-    print("WARNING! No wandb API key found, running without wandb!")
+    callbacks = []
+    print("WARNING! No callbacks found, running without wandb or tfboard!")
 
 ckpt_config = air.CheckpointConfig(num_to_keep=exp_config['keep'], 
                                    checkpoint_frequency=exp_config['freq'], 
@@ -54,7 +70,7 @@ ckpt_config = air.CheckpointConfig(num_to_keep=exp_config['keep'],
 tuner = tune.Tuner(
         'PPO',
         param_space=configs.to_dict(),
-        run_config=air.RunConfig(name = exp_config['name'], callbacks=wdb_callbacks, local_dir=exp_config['dir'], 
+        run_config=air.RunConfig(name = exp_config['name'], callbacks=callbacks, local_dir=exp_config['dir'], 
                                 stop=exp_config['stop'], checkpoint_config=ckpt_config, verbose=0),
     )
 
