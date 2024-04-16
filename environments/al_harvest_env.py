@@ -83,18 +83,19 @@ class AlHarvestMeltingPotEnv(multi_agent_env.MultiAgentEnv):
 	def step(self, action_dict):
 		"""See base class."""
 		actions = [action_dict[agent_id] for agent_id in self._ordered_agent_ids]
+		# TODO: figure out the alharvest env first, is this an agent centric view or full map view?
 		obs = copy.deepcopy(self._env.observation())
 		
 		custom_rewards = [get_custom_rewards(obs[index], actions[index], index) for index in range(len(self._ordered_agent_ids))]
 		timestep = self._env.step(actions)
 		if self._use_custom_reward:
 			rewards = {
-				agent_id: custom_rewards[index] #+ timestep.reward[index]
+				agent_id: custom_rewards[index]
 				for index, agent_id in enumerate(self._ordered_agent_ids)
 			}
 		else:
 			rewards = {
-				agent_id:  timestep.reward[index]
+				agent_id: timestep.reward[index]
 				for index, agent_id in enumerate(self._ordered_agent_ids)
 			}
 		done = {'__all__': timestep.last()}
@@ -160,7 +161,7 @@ class AlHarvestMeltingPotEnv(multi_agent_env.MultiAgentEnv):
 			for i, agent_id in enumerate(self._ordered_agent_ids)
 		})
 
-# TODO: design a custom rewards that strictly follows the agent's observations
+# TODO: design a custom rewards that extends reward beyond the agent's observations?
 def get_custom_rewards(obs, action, index):
 	"""Reward players for moving closer to ripe berry"""
 	rgb_data = downsample_observation(obs['RGB'], 8)

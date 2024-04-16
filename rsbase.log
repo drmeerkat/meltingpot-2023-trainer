@@ -64142,3 +64142,10 @@ To visualize your results with TensorBoard, run: `tensorboard --logdir /tmp/ray/
 [36m(PPO pid=2137)[0m Checkpoint successfully created at: Checkpoint(filesystem=local, path=/workspace/logs/20240416-0447-22-ray-logs/torch/al_harvest_base/PPO_meltingpot_6b4e0_00000_0_2024-04-16_04-47-24/checkpoint_000000)
 [36m(PPO pid=2137)[0m [32m [repeated 3x across cluster][0m
 [36m(PPO pid=2137)[0m   'seq_lens': np.ndarray((3200,), dtype=int32, min=20.0, max=20.0, mean=20.0)}
+[36m(PPO pid=2137)[0m Checkpoint successfully created at: Checkpoint(filesystem=local, path=/workspace/logs/20240416-0447-22-ray-logs/torch/al_harvest_base/PPO_meltingpot_6b4e0_00000_0_2024-04-16_04-47-24/checkpoint_000001)
+[36m(PPO pid=2137)[0m Checkpoint successfully created at: Checkpoint(filesystem=local, path=/workspace/logs/20240416-0447-22-ray-logs/torch/al_harvest_base/PPO_meltingpot_6b4e0_00000_0_2024-04-16_04-47-24/checkpoint_000002)
+[36m(PPO pid=2137)[0m Checkpoint successfully created at: Checkpoint(filesystem=local, path=/workspace/logs/20240416-0447-22-ray-logs/torch/al_harvest_base/PPO_meltingpot_6b4e0_00000_0_2024-04-16_04-47-24/checkpoint_000003)
+[36m(PPO pid=2137)[0m Checkpoint successfully created at: Checkpoint(filesystem=local, path=/workspace/logs/20240416-0447-22-ray-logs/torch/al_harvest_base/PPO_meltingpot_6b4e0_00000_0_2024-04-16_04-47-24/checkpoint_000004)
+[36m(PPO pid=2137)[0m Checkpoint successfully created at: Checkpoint(filesystem=local, path=/workspace/logs/20240416-0447-22-ray-logs/torch/al_harvest_base/PPO_meltingpot_6b4e0_00000_0_2024-04-16_04-47-24/checkpoint_000005)
+[36m(PPO pid=2137)[0m Checkpoint successfully created at: Checkpoint(filesystem=local, path=/workspace/logs/20240416-0447-22-ray-logs/torch/al_harvest_base/PPO_meltingpot_6b4e0_00000_0_2024-04-16_04-47-24/checkpoint_000006)
+[36m(PPO pid=2137)[0m Checkpoint successfully created at: Checkpoint(filesystem=local, path=/workspace/logs/20240416-0447-22-ray-logs/torch/al_harvest_base/PPO_meltingpot_6b4e0_00000_0_2024-04-16_04-47-24/checkpoint_000007)
