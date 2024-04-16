@@ -23,6 +23,7 @@ timestamp = datetime.now().strftime("%Y%m%d-%H%M-%S")
 output_dir = f'/home/meerkat/Developments/explogs/{timestamp}-ray-logs'
 num_workers = 8
 use_tf_board = True
+random_seed = 136838
 # the below settings should only be changed if you add support for a new substrate
 experiment_name = f'al_harvest'
 substrate_name = 'allelopathic_harvest__open'
@@ -40,6 +41,8 @@ configs, exp_config, tune_config = get_experiment_config(default_config,
                                                          experiment_name,
                                                          substrate_name,
                                                          env_creator)
+# Set seed for deterministic training
+configs.debugging(seed=random_seed)
 
 if "WANDB_API_KEY" in os.environ:
     wandb_project = f'{experiment_name}_torch'
@@ -80,3 +83,5 @@ best_result = results.get_best_result(metric="episode_reward_mean", mode="max")
 print(best_result)
 
 ray.shutdown()
+
+# nohup docker run --rm -v "/home/ubuntu/c3learning/Curriculum-Baselines:/workspace/code" -v "/home/ubuntu/explogs:/workspace/logs" -w /workspace/code/currot --gpus '"device=0"' --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 drmeerkat/torchdev python -u run.py --device cuda --base-log-dir /workspace/logs --type wasserstein --learning-rate 5e-4 --net-arch 1 --k 2 --sep 1 --seed $1 > /home/ubuntu/wass.log 2>&1 &
