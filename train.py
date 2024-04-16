@@ -39,6 +39,7 @@ ray.init(local_mode=False, ignore_reinit_error=True, num_gpus=int(torch.cuda.is_
 registry.register_env("meltingpot", env_creator)
 default_config = ppo.PPOConfig()
 default_config.use_custom_reward = False
+experiment_name += '_base' if not default_config.use_custom_reward else ''
 configs, exp_config, tune_config = get_experiment_config(default_config, 
                                                          output_dir, 
                                                          num_workers, 

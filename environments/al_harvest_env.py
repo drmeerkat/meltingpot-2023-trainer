@@ -87,7 +87,7 @@ class AlHarvestMeltingPotEnv(multi_agent_env.MultiAgentEnv):
 		
 		custom_rewards = [get_custom_rewards(obs[index], actions[index], index) for index in range(len(self._ordered_agent_ids))]
 		timestep = self._env.step(actions)
-		if self.use_custom_reward:
+		if self._use_custom_reward:
 			rewards = {
 				agent_id: custom_rewards[index] #+ timestep.reward[index]
 				for index, agent_id in enumerate(self._ordered_agent_ids)
