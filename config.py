@@ -19,7 +19,7 @@ def get_experiment_config(default_config, output_dir, num_workers, experiment_na
 
     # Environment
     run_configs.env = "meltingpot"
-    run_configs.env_config = {"substrate": substrate_name, "roles": player_roles, "scaled": scale_factor}
+    run_configs.env_config = {"substrate": substrate_name, "roles": player_roles, "scaled": scale_factor, "use_custom_reward": run_configs.use_custom_reward}
 
     base_env = env_creator(run_configs.env_config)
     policies = {

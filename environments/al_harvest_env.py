@@ -43,7 +43,7 @@ ACTIONS = {
 class AlHarvestMeltingPotEnv(multi_agent_env.MultiAgentEnv):
 	"""Interfacing Melting Pot substrates and RLLib MultiAgentEnv."""
 
-	def __init__(self, env: dmlab2d.Environment):
+	def __init__(self, env: dmlab2d.Environment, custom_reward: bool = True):
 		"""Initializes the instance.
 
 		Args:
@@ -59,6 +59,9 @@ class AlHarvestMeltingPotEnv(multi_agent_env.MultiAgentEnv):
 		# RLLib requires environments to have the following member variables:
 		# observation_space, action_space, and _agent_ids
 		self._agent_ids = set(self._ordered_agent_ids)
+
+		# Use self-defined reward function by default
+		self._use_custom_reward = custom_reward
 		
 		# RLLib expects a dictionary of agent_id to observation or action,
 		# Melting Pot uses a tuple, so we convert them here
@@ -84,10 +87,16 @@ class AlHarvestMeltingPotEnv(multi_agent_env.MultiAgentEnv):
 		
 		custom_rewards = [get_custom_rewards(obs[index], actions[index], index) for index in range(len(self._ordered_agent_ids))]
 		timestep = self._env.step(actions)
-		rewards = {
-			agent_id: custom_rewards[index] #+ timestep.reward[index]
-			for index, agent_id in enumerate(self._ordered_agent_ids)
-		}
+		if self.use_custom_reward:
+			rewards = {
+				agent_id: custom_rewards[index] #+ timestep.reward[index]
+				for index, agent_id in enumerate(self._ordered_agent_ids)
+			}
+		else:
+			rewards = {
+				agent_id:  timestep.reward[index]
+				for index, agent_id in enumerate(self._ordered_agent_ids)
+			}
 		done = {'__all__': timestep.last()}
 		info = {}
 
@@ -268,5 +277,5 @@ def al_harvest_env_creator(env_config):
     env_config = config_dict.ConfigDict(env_config)
     env = substrate.build(env_config['substrate'], roles=env_config['roles'])
     env = DownSamplingSubstrateWrapper(env, env_config['scaled'])
-    env = AlHarvestMeltingPotEnv(env)
+    env = AlHarvestMeltingPotEnv(env, custom_reward=env_config.get('use_custom_reward', True))
     return env
