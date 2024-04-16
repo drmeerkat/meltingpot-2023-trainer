@@ -24,7 +24,7 @@ timestamp = datetime.now().strftime("%Y%m%d-%H%M-%S")
 
 # This output_dir is the path used in your container!!
 output_dir = f'/workspace/logs/{timestamp}-ray-logs'
-num_workers = 4
+num_workers = 8
 use_tf_board = True
 random_seed = 136838
 # the below settings should only be changed if you add support for a new substrate
