@@ -160,6 +160,7 @@ class AlHarvestMeltingPotEnv(multi_agent_env.MultiAgentEnv):
 			for i, agent_id in enumerate(self._ordered_agent_ids)
 		})
 
+# TODO: design a custom rewards that strictly follows the agent's observations
 def get_custom_rewards(obs, action, index):
 	"""Reward players for moving closer to ripe berry"""
 	rgb_data = downsample_observation(obs['RGB'], 8)
