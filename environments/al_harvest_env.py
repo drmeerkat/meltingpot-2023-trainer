@@ -83,7 +83,6 @@ class AlHarvestMeltingPotEnv(multi_agent_env.MultiAgentEnv):
 	def step(self, action_dict):
 		"""See base class."""
 		actions = [action_dict[agent_id] for agent_id in self._ordered_agent_ids]
-		# TODO: figure out the alharvest env first, is this an agent centric view or full map view?
 		obs = copy.deepcopy(self._env.observation())
 		
 		custom_rewards = [get_custom_rewards(obs[index], actions[index], index) for index in range(len(self._ordered_agent_ids))]
@@ -247,6 +246,8 @@ def find_nearest_berry(rgb_data, target_colors, offset_in_front_of_player=False)
 	
 	return nearest_pixel, shortest_distance
 
+# TODO: This can be improved, use a set, if the action is within the set, its ok
+# consider the example of moving in squres
 def direction_from_reference(nearest_pixel):
     reference_pixel = (9, 5)
     

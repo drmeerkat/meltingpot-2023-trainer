@@ -24,7 +24,7 @@ timestamp = datetime.now().strftime("%Y%m%d-%H%M-%S")
 
 # This output_dir is the path used in your container!!
 output_dir = f'/workspace/logs/{timestamp}-ray-logs'
-num_workers = 8
+num_workers = 4
 use_tf_board = True
 random_seed = 136838
 # the below settings should only be changed if you add support for a new substrate
@@ -38,7 +38,7 @@ os.environ['RAY_memory_monitor_refresh_ms'] = '0'
 ray.init(local_mode=False, ignore_reinit_error=True, num_gpus=int(torch.cuda.is_available()))
 registry.register_env("meltingpot", env_creator)
 default_config = ppo.PPOConfig()
-default_config.use_custom_reward = False
+default_config.use_custom_reward = True
 experiment_name += '_base' if not default_config.use_custom_reward else ''
 configs, exp_config, tune_config = get_experiment_config(default_config, 
                                                          output_dir, 
