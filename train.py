@@ -39,6 +39,7 @@ registry.register_env("meltingpot", env_creator)
 default_config = ppo.PPOConfig()
 default_config.use_custom_reward = True
 experiment_name += '_base' if not default_config.use_custom_reward else ''
+experiment_name += '_custom'
 configs, exp_config, tune_config = get_experiment_config(default_config, 
                                                          output_dir, 
                                                          num_workers, 
