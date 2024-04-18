@@ -201,6 +201,8 @@ def get_custom_rewards(obs, action, index):
 			total_reward += 0.025 if action == ACTIONS['turn_right'] else 0
 		else:
 			# Find closest berry to the position in front of player (where the zapper is)
+			# at this point, the nearest unripe is definitely not the cross positions
+			# TODO: use global nearest in this part?
 			nearest_unripe, _ = find_nearest_berry(rgb_data, UNRIPE_NONRED_COLORS, offset_in_front_of_player=True)
 			# ensure player navigates in front of berry
 			nearest_unripe = (nearest_unripe[0]+1, nearest_unripe[1])
@@ -232,6 +234,7 @@ def find_nearest_berry(rgb_data, target_colors, offset_in_front_of_player=False)
 	if len(rows) == 0:
 		return None, None
 	
+	# TODO: we don't really need this offset???
 	origin_pos = (9, 5)
 	if offset_in_front_of_player:
 		origin_pos = (8, 5)
@@ -245,6 +248,39 @@ def find_nearest_berry(rgb_data, target_colors, offset_in_front_of_player=False)
 	shortest_distance = distances[min_index]
 	
 	return nearest_pixel, shortest_distance
+
+def find_nearest_berry_global(rgb_data, target_colors, offset_in_front_of_player=False):
+	# TODO: finish this
+	# # Input rgb data is the downsampled world map
+
+	# combined_mask = np.zeros((33, 33), dtype=bool)
+	
+	# # Create a mask for each target color and combine them
+	# for color in target_colors:
+	# 	mask = np.all(rgb_data == color, axis=-1)
+	# 	combined_mask = np.logical_or(combined_mask, mask)
+	
+	# # Get row and column indices of pixels matching any of the target colors
+	# rows, cols = np.where(combined_mask)
+	
+	# # If there's no matching pixel, return None
+	# if len(rows) == 0:
+	# 	return None, None
+	
+	# origin_pos = (9, 5)
+	# if offset_in_front_of_player:
+	# 	origin_pos = (8, 5)
+
+	# # Calculate the Euclidean distance for each matching pixel to the point (10, 6)
+	# distances = np.sqrt((rows - origin_pos[0])**2 + (cols - origin_pos[1])**2)  # Subtracting 1 because of 0-based indexing
+	
+	# # Find the pixel with the minimum distance
+	# min_index = np.argmin(distances)
+	# nearest_pixel = (rows[min_index], cols[min_index])
+	# shortest_distance = distances[min_index]
+	
+	# return nearest_pixel, shortest_distance
+	pass
 
 # TODO: This can be improved, use a set, if the action is within the set, its ok
 # consider the example of moving in squres

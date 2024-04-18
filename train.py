@@ -20,13 +20,12 @@ timestamp = datetime.now().strftime("%Y%m%d-%H%M-%S")
 #     args.base_log_dir = os.path.join(args.base_log_dir, f"{timestamp}-logs")
 # if not os.path.isdir(args.base_log_dir): 
 #     os.makedirs(args.base_log_dir)
-# TODO: do you need timestamp in ray log?
 
 # This output_dir is the path used in your container!!
 output_dir = f'/workspace/logs/{timestamp}-ray-logs'
-num_workers = 4
+num_workers = 16
 use_tf_board = True
-random_seed = 136838
+random_seed = 36599
 # the below settings should only be changed if you add support for a new substrate
 experiment_name = f'al_harvest'
 substrate_name = 'allelopathic_harvest__open'
