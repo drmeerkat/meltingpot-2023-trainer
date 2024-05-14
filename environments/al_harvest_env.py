@@ -283,6 +283,7 @@ def get_custom_rewards_global(obs, action, index):
 			# Find closest berry to the position in front of player (where the zapper is)
 			# at this point, the nearest unripe is definitely not the cross positions
 			# In our set up, we use global nearest instead of agent local nearest (the one can be seen)
+			# TODO: we might still need to navigate towards the front of unripe berries!
 			nearest_unripe, _ = find_nearest_berry_global(down_world_obs, rgb_data, UNRIPE_NONRED_COLORS)
 			direction = direction_from_reference(nearest_unripe)
 			expected_action = direction_to_number(direction)
